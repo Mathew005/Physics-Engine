@@ -1,40 +1,51 @@
 #include <SFML/Graphics.hpp>
 
-class Circle {
+class CircleSpawner {
 public:
-    Circle(float radius, sf::Vector2f position, sf::Color fillColor)
-        : m_radius(radius), m_position(position), m_fillColor(fillColor) {}
+    CircleSpawner(sf::RenderWindow& window)
+        : m_window(window) {}
 
-    void draw(sf::RenderWindow& window) {
-        sf::CircleShape circle(m_radius);
-        circle.setPosition(m_position);
-        circle.setFillColor(m_fillColor);
-        window.draw(circle);
+    void handleEvents() {
+        sf::Event event;
+        while (m_window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                m_window.close();
+            else if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    // Spawn a circle at the mouse position
+                    sf::CircleShape circle(20.0f);
+                    circle.setFillColor(sf::Color::Green);
+                    circle.setPosition(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
+                    m_circles.push_back(circle);
+                }
+            }
+        }
+    }
+
+    void drawCircles() {
+        for (const auto& circle : m_circles) {
+            m_window.draw(circle);
+        }
     }
 
 private:
-    float m_radius;
-    sf::Vector2f m_position;
-    sf::Color m_fillColor;
+    sf::RenderWindow& m_window;
+    std::vector<sf::CircleShape> m_circles;
 };
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Circle Example");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Circle Spawner");
 
-    // Create an instance of Circle with radius 50, position (400, 300), and red fill color
-    Circle circle(50.0f, sf::Vector2f(400.0f, 300.0f), sf::Color::Red);
+    CircleSpawner spawner(window);
 
     while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
         window.clear();
 
-        // Draw the circle
-        circle.draw(window);
+        // Handle events (including mouse clicks to spawn circles)
+        spawner.handleEvents();
+
+        // Draw all spawned circles
+        spawner.drawCircles();
 
         window.display();
     }
