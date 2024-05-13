@@ -1,53 +1,98 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
 
-class CircleSpawner {
+class Circle {
 public:
-    CircleSpawner(sf::RenderWindow& window)
-        : m_window(window) {}
+    Circle(float radius = 50.0f, sf::Vector2f position = sf::Vector2f(400.0f, 300.0f), sf::Color fillColor = sf::Color::Red)
+        : m_radius(radius), m_position(position), m_fillColor(fillColor) {}
 
-    void handleEvents() {
+    void draw(sf::RenderWindow& window) const {
+        sf::CircleShape circle(m_radius);
+        circle.setPosition(m_position);
+        circle.setFillColor(m_fillColor);
+        window.draw(circle);
+    }
+
+private:
+    float m_radius;
+    sf::Vector2f m_position;
+    sf::Color m_fillColor;
+};
+
+class CircleGenerator {
+public:
+    CircleGenerator() = default;
+
+    Circle generate(float radius = 30.0f, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f), sf::Color fillColor = sf::Color::Green) const {
+        return Circle(radius, position, fillColor);
+    }
+};
+
+class EventHandler {
+public:
+    EventHandler(sf::RenderWindow& window, CircleGenerator& circleGenerator)
+        : m_window(window), m_circleGenerator(circleGenerator) {}
+
+    void handleEvents(std::vector<Circle>& circles) {
         sf::Event event;
         while (m_window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 m_window.close();
             else if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    // Spawn a circle at the mouse position
-                    sf::CircleShape circle(20.0f);
-                    circle.setFillColor(sf::Color::Green);
-                    circle.setPosition(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-                    m_circles.push_back(circle);
+                    // Get the mouse position relative to the window
+                    sf::Vector2f mousePosition = m_window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+                    // Generate a circle at the mouse position and store it
+                    circles.push_back(m_circleGenerator.generate(30.0f, mousePosition, sf::Color::Green));
                 }
             }
         }
     }
 
-    void drawCircles() {
-        for (const auto& circle : m_circles) {
-            m_window.draw(circle);
-        }
-    }
-
 private:
     sf::RenderWindow& m_window;
-    std::vector<sf::CircleShape> m_circles;
+    CircleGenerator& m_circleGenerator;
 };
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Circle Spawner");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Circle Example");
 
-    CircleSpawner spawner(window);
+    CircleGenerator circleGenerator;
+    EventHandler eventHandler(window, circleGenerator);
+
+    std::vector<Circle> circles; // Store the circles that have been spawned
+
+    sf::Clock clock;
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 frames per second
 
     while (window.isOpen()) {
-        window.clear();
+        sf::Time elapsedTime = clock.restart();
+        timeSinceLastUpdate += elapsedTime;
 
         // Handle events (including mouse clicks to spawn circles)
-        spawner.handleEvents();
+        eventHandler.handleEvents(circles);
+
+        // Update at fixed time intervals
+        while (timeSinceLastUpdate > timePerFrame) {
+            timeSinceLastUpdate -= timePerFrame;
+        }
+
+        window.clear();
+
+        // Draw the original red circle
+        Circle originalCircle;
+        originalCircle.draw(window);
 
         // Draw all spawned circles
-        spawner.drawCircles();
+        for (const auto& circle : circles) {
+            circle.draw(window);
+        }
 
         window.display();
+
+        // Sleep to limit CPU usage
+        sf::sleep(sf::milliseconds(1));
     }
 
     return 0;
