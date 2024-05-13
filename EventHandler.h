@@ -10,7 +10,7 @@ public:
     void handleEvents();
 
 private:
-    enum class ShapeType { Circle, Square, Triangle };
+    enum class ShapeType { Circle };
     sf::RenderWindow& m_window;
     SceneHandler& m_sceneHandler;
     ShapeType m_shapeType = ShapeType::Circle; // Default shape type

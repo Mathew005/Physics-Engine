@@ -161,11 +161,13 @@
   <ItemGroup>
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PhysicsHandler.cpp" />
     <ClCompile Include="SceneHandler.cpp" />
     <ClCompile Include="Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="PhysicsHandler.h" />
     <ClInclude Include="SceneHandler.h" />
     <ClInclude Include="Shape.h" />
   </ItemGroup>

@@ -3,7 +3,11 @@
 #include "EventHandler.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Shapes Example");
+    sf::RenderWindow window(
+        sf::VideoMode(800, 600),
+        "SFML Window", 
+        sf::Style::Default, 
+        sf::ContextSettings(0, 0, 1));
 
     SceneHandler sceneHandler;
     EventHandler eventHandler(window, sceneHandler);

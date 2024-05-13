@@ -13,30 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Headers">
+      <UniqueIdentifier>{3007ab75-5e5f-4695-a347-e1f94032945b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{7e877e3f-3bfc-4113-a52d-c997c9ef1ad6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="SceneHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="EventHandler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsHandler.cpp">
+      <Filter>Source Files\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shape.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="EventHandler.h">
+      <Filter>Source Files\Headers</Filter>
     </ClInclude>
     <ClInclude Include="SceneHandler.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="EventHandler.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Shape.h">
+      <Filter>Source Files\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsHandler.h">
+      <Filter>Source Files\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
